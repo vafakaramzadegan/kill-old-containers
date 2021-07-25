@@ -45,7 +45,7 @@ function kill_old_containers(){
     IFS=$'\n'
 	echo "Fetching the list of running containers..."
     OUTPUT=($(docker container ls))
-    INITIAL_IFS=$SAVEIFS
+    IFS=$INITIAL_IFS
 
 	echo "Terminating containers older than ${1} seconds:"
     for (( 0; i<${#OUTPUT[@]}; i++ ))
