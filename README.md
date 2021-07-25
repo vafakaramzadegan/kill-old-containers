@@ -9,7 +9,7 @@ however, there are situations that you might want to remove an active container.
 consequently, the script `kill`s the ones that have been running over a certain amount of time.
 
 ## Usage
-Simply invoke the script through terminal or inside your script. you can even set a cron job to automate the process:
+Simply invoke the script through terminal. you can even set a cron job to automate the process:
 
 ```
 $ ./kill-old-containers.sh [number of seconds]
