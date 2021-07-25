@@ -36,20 +36,20 @@ function kill_old_containers(){
 	# ----------------------------------------------------
 	# | ............ | ... | ([0-9]+.+ago) | ... | (.+)  |
 	# ----------------------------------------------------
-    CONTAINER_REGEX=" +([0-9]+.+ago).+ +(.+)"
-    # get containers information.
+	CONTAINER_REGEX=" +([0-9]+.+ago).+ +(.+)"
+	# get containers information.
 	# we need to change the internal field separator to newline (\n)
 	# this helps converting each line of `$ docker container ls` output
 	# to an array item.
-    INITIAL_IFS=$IFS
-    IFS=$'\n'
+	INITIAL_IFS=$IFS
+	IFS=$'\n'
 	echo "Fetching the list of running containers..."
-    OUTPUT=($(docker container ls))
-    IFS=$INITIAL_IFS
+	OUTPUT=($(docker container ls))
+	IFS=$INITIAL_IFS
 
 	echo "Terminating containers older than ${1} seconds:"
-    for (( 0; i<${#OUTPUT[@]}; i++ ))
-    do
+	for (( 0; i<${#OUTPUT[@]}; i++ ))
+	do
 		REC="${OUTPUT[$i]}"
 		if [[ $REC =~ $CONTAINER_REGEX ]]
 		then
