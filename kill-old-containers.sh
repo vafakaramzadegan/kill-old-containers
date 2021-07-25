@@ -71,6 +71,7 @@ function kill_old_containers(){
 	done
 }
 
+
 # check if Docker is installed
 if [ ! -x "$(command -v docker)" ]; then
 	echo "You don't even have Docker installed on your machine! :/"
