@@ -1,5 +1,5 @@
 # kill-old-containers
-By using this script, you can easily remove docker containers which have been running more than a specific time.
+By using this script, you can easily remove docker containers which have been running for more than a specific time.
 
 The only option Docker provides is `$ docker container prune`. this just removes containers that are already stopped.
 however, there are situations that you might want to remove an active container.
