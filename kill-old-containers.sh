@@ -8,9 +8,12 @@ NC='\033[0m'
 function kill_old_containers(){
     # changing IFS to newline helps converting "$(docker ps)" output
     # to array items
+    INITIAL_IFS=$IFS
     IFS=$'\n'
     # docker ps output: [CONTAINER ID] [CONTAINER NAME]
     OUTPUT=($(docker ps --format "{{.ID}} {{.Names}}" | grep "${2}"))
+    # change IFS to its initial value
+    IFS=$INITIAL_IFS
     printf "Killing containers older than ${1} seconds:\n\n"
     CONT_COUNT=${#OUTPUT[@]}
     if [ $CONT_COUNT == 0 ]; then
