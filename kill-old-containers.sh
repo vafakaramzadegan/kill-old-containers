@@ -21,19 +21,19 @@ function kill_old_containers(){
         exit 0
     fi
     NUM_KILLED=0
-    for (( 0; i<$CONT_COUNT; i++ ))
+    for (( i=0; i<$CONT_COUNT; i++ ))
     do
         REC=${OUTPUT[$i]}
         # split content of each record by whitespace
         CONT_ID=$(echo $REC | cut -d' ' -f1)
         CONT_NAME=$(echo $REC | cut -d' ' -f2)
         # convert the time the container started to unix timestamp
-        CONT_TIMESTAMP=$(docker inspect --format=\"{{.State.StartedAt}}\" $CONT_ID | xargs date +%s -d)
+        CONT_TIMESTAMP=$(docker inspect --format="{{.State.StartedAt}}" $CONT_ID | xargs date +%s -d)
         CURRENT_TIMESTAMP=$(date +%s)
         DIFF=$(expr $CURRENT_TIMESTAMP - $CONT_TIMESTAMP)
         if [[ $DIFF -ge $1 ]]
         then
-            echo -e "${YELLOW}$CONT_ID${NC}($CONT_NAME): ${LIGHT_CYAN}$DIFF${NC} seconds ago"
+            echo -e "${YELLOW}$CONT_ID${NC}($CONT_NAME): started ${LIGHT_CYAN}$DIFF${NC} secs ago."
             KILL_CMD="docker kill ${CONT_ID}"
             # invoke docker kill command in the background to prevent
             # possible freezing
@@ -60,19 +60,26 @@ while [ "$1" != "" ]; do
             SEARCH="$1";;
         -t | --time )
             shift
-            TIME=$1
+            time_arg="$1"
+            if [[ $time_arg =~ ^[0-9]+$ ]]; then
+                TIME="${time_arg}"
+            elif [[ $time_arg =~ ^[0-9]+s$ ]]; then
+                TIME="$(expr ${time_arg%?})"
+            elif [[ $time_arg =~ ^[0-9]+m$ ]]; then
+                TIME="$(expr ${time_arg%?} \* 60)"
+            elif [[ $time_arg =~ ^[0-9]+h$ ]]; then
+                TIME="$(expr ${time_arg%?} \* 60 \* 60)"
+            elif [[ $time_arg =~ ^[0-9]+d$ ]]; then
+                TIME="$(expr ${time_arg%?} \* 24 \* 60 \* 60)"
+            else
+                echo "Invalid time format: $time_arg"
+                exit 1
+            fi;;
+        * )
+            echo "Invalid argument: $1"
+            exit 1;;
     esac
     shift
 done
 
-if [[ "$TIME" -eq "$TIME" ]] 2>/dev/null ; then
-    if [[ $TIME -gt 0 ]]; then
-        echo "$(kill_old_containers $TIME $SEARCH)"
-    else
-        echo "Invalid value for the number of seconds!"
-        exit 0
-    fi
-else
-    echo "Invalid value for the number of seconds!"
-    exit 0
-fi
+kill_old_containers "$TIME" "$SEARCH"
