@@ -1,8 +1,6 @@
 # kill-old-containers
 This Bash script provides an easy and efficient way to clean up old Docker containers based on their start time and/or name. Unlike Docker's built-in --timeout parameter, which terminates a container after a certain period of inactivity, this script allows you to specify a specific time interval after which containers are terminated regardless of activity.
 
-`kill-old-containers` does the job for you!
-
 ## Usage
 The script has the following command line arguments:
 ```
