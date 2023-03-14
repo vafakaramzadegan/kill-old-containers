@@ -1,15 +1,21 @@
 # kill-old-containers
-Docker provides methods to remove orphan containers or the ones that are already stuck. however, you might want to kill active and healthy containers only because they've been running for more than a specific amount of time.
+This Bash script provides an easy and efficient way to clean up old Docker containers based on their start time and/or name. Unlike Docker's built-in --timeout parameter, which terminates a container after a certain period of inactivity, this script allows you to specify a specific time interval after which containers are terminated regardless of activity.
 
 `kill-old-containers` does the job for you!
 
 ## Usage
-Simply invoke the script in the terminal. you can even set up a cron job to automate the process:
+The script has the following command line arguments:
+```
+-s | --search [name]: filter containers by name. (optional)
+-t | --time [time]: time in seconds, minutes (m), hours (h), or days (d). This argument is required.
+```
 
+## Examples
+Kill all containers older than 1 hour:
 ```
-$ ./kill-old-containers.sh -t | --time [number of seconds]
+$ ./docker-killer.sh -t 1h
 ```
-You can also search for certain containers. this kills containers older than 2 minutes with their titles containing "nginx":
+Kill all containers older than 5 minutes and whose name contains "myapp":
 ```
-$ ./kill-old-containers.sh --time 120 --search nginx
+$ ./docker-killer.sh -t 5m -s myapp
 ```
