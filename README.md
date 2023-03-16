@@ -11,9 +11,9 @@ The script has the following command line arguments:
 ## Examples
 Kill all containers older than 1 hour:
 ```
-$ ./docker-killer.sh -t 1h
+$ ./kill-old-containers.sh -t 1h
 ```
 Kill all containers older than 5 minutes and whose name contains "myapp":
 ```
-$ ./docker-killer.sh -t 5m -s myapp
+$ ./kill-old-containers.sh -t 5m -s myapp
 ```
